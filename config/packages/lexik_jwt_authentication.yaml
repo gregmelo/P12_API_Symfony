@@ -1,0 +1,8 @@
+lexik_jwt_authentication:
+    # On utilise les variables d'environnement, mais on les fait
+    # passer par le processeur "resolve" pour que %kernel.project_dir%
+    # soit correctement remplacé dans les chemins de clés.
+    secret_key: '%env(resolve:JWT_SECRET_KEY)%'   # Chemin vers private.pem
+    public_key: '%env(resolve:JWT_PUBLIC_KEY)%'   # Chemin vers public.pem
+    pass_phrase: '%env(JWT_PASSPHRASE)%'          # Mot de passe choisi
+    token_ttl: 3600                               # Durée de validité du token (1h)
