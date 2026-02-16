@@ -51,4 +51,77 @@ class UserController extends AbstractController
             'id' => $user->getId()
         ], 201);
     }
+
+    #[Route('/{id}', name: 'update', methods: ['PUT'])]
+    public function update(
+        int $id,
+        Request $request,
+        EntityManagerInterface $em,
+        UserRepository $userRepository,
+        UserPasswordHasherInterface $passwordHasher
+    ): JsonResponse {
+        $user = $userRepository->find($id);
+        if (!$user) {
+            return $this->json(['error' => 'Utilisateur non trouvé'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        if (!is_array($data)) {
+            return $this->json(['error' => 'Corps de requête invalide'], 400);
+        }
+
+        if (array_key_exists('email', $data)) {
+            if (empty($data['email'])) {
+                return $this->json(['error' => 'Email ne peut pas être vide'], 400);
+            }
+
+            $existing = $userRepository->findOneBy(['email' => $data['email']]);
+            if ($existing && $existing->getId() !== $user->getId()) {
+                return $this->json(['error' => 'Cet email est déjà utilisé'], 409);
+            }
+
+            $user->setEmail($data['email']);
+        }
+
+        if (array_key_exists('city', $data)) {
+            if (empty($data['city'])) {
+                return $this->json(['error' => 'La ville ne peut pas être vide'], 400);
+            }
+            $user->setCity($data['city']);
+        }
+
+        if (array_key_exists('password', $data)) {
+            if (empty($data['password'])) {
+                return $this->json(['error' => 'Le mot de passe ne peut pas être vide'], 400);
+            }
+            $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
+            $user->setPassword($hashedPassword);
+        }
+
+        $user->setUpdatedAt(new \DateTimeImmutable());
+        $em->flush();
+
+        return $this->json([
+            'message' => 'Utilisateur mis à jour avec succès',
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'city' => $user->getCity(),
+            'createdAt' => $user->getCreatedAt()?->format('Y-m-d H:i:s'),
+            'updatedAt' => $user->getUpdatedAt()?->format('Y-m-d H:i:s'),
+        ], 200);
+    }
+
+    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+    public function delete(int $id, EntityManagerInterface $em, UserRepository $userRepository): JsonResponse
+    {
+        $user = $userRepository->find($id);
+        if (!$user) {
+            return $this->json(['error' => 'Utilisateur non trouvé'], 404);
+        }
+
+        $em->remove($user);
+        $em->flush();
+
+        return $this->json(['message' => 'Utilisateur supprimé avec succès'], 200);
+    }
 }
