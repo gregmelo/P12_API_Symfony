@@ -8,6 +8,12 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Role>
+ *
+ * Repository de l'entité Role.
+ *
+ * Il permet de récupérer les rôles en base (ROLE_USER, ROLE_ADMIN, ...)
+ * et peut être étendu avec des méthodes de recherche spécifiques
+ * si le besoin se présente.
  */
 class RoleRepository extends ServiceEntityRepository
 {

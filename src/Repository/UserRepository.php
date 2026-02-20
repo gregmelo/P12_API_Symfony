@@ -8,6 +8,12 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<User>
+ *
+ * Repository de l'entité User.
+ *
+ * Pour l'instant il ne contient que le constructeur,
+ * mais il peut être enrichi avec des méthodes de recherche
+ * personnalisées (ex : recherche par ville, par rôle, etc.).
  */
 class UserRepository extends ServiceEntityRepository
 {

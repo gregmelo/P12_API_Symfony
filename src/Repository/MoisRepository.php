@@ -8,6 +8,12 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Mois>
+ *
+ * Repository de l'entité Mois.
+ *
+ * Les méthodes par défaut de ServiceEntityRepository (find, findAll, ...)
+ * sont souvent suffisantes, mais on peut ajouter ici des requêtes
+ * spécifiques si besoin (ex : recherche par numéro ou par nom).
  */
 class MoisRepository extends ServiceEntityRepository
 {
