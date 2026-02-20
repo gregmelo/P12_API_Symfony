@@ -198,8 +198,8 @@ class ConseilController extends AbstractController
      *
      * @return JsonResponse Détail du conseil mis à jour ou erreur.
      */
-    // PUT /conseil/{id} : mise à jour partielle d'un conseil (admin)
-    #[Route('/{id}', name: 'update', methods: ['PUT'])]
+    // PUT/PATCH /conseil/{id} : mise à jour partielle d'un conseil (admin)
+    #[Route('/{id}', name: 'update', methods: ['PUT', 'PATCH'])]
     public function update(
         int $id,
         Request $request,
