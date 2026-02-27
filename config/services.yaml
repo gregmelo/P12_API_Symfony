@@ -19,5 +19,11 @@ services:
     App\:
         resource: '../src/'
 
+    # Service de météo : on injecte la clé API via une variable d'environnement.
+    App\Service\MeteoService:
+        arguments:
+            $apiKey: '%env(OPENWEATHER_API_KEY)%'
+            # $baseUrl peut rester la valeur par défaut définie dans le constructeur
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
